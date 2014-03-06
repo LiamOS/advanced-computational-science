@@ -8,8 +8,8 @@ from matplotlib.pyplot import *
 from numpy import *
 
 # Define our space and time step sizes.
-dt = 0.02
-dx = 0.02
+dt = 0.01
+dx = 0.01
 
 # Define our Temporal and Spatial lengths.
 Time = [0,14]
@@ -46,7 +46,6 @@ for j in range(1,nx-1):
 for n in range(2,nt):
     for j in range(1,nx-1):
         U[n][j] = c*(U[n-1][j-1] - 2*U[n-1][j] + U[n-1][j+1]) - U[n-2][j] + 2*U[n-1][j]
-    if (n%100) is 0:
+    if ((n-2)%100) is 0:
         plot(x,U[n])
-
 show()
