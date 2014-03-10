@@ -42,8 +42,10 @@ def run(dt,dx,T,D):
             U[n][j] = c*(U[n-1][j-1] - 2*U[n-1][j] + U[n-1][j+1]) - U[n-2][j] + 2*U[n-1][j]
 
     Ltime = nt*10.5/(T[1] - T[0])
-    norm = sqrt(sum([dx*(l**2) for l in U[Ltime]]))
-
+    norm = 0
+    for k in U[Ltime]:
+        norm += k**2
+    norm = sqrt(dx*norm)
     return norm
 
 
@@ -52,16 +54,19 @@ Time = [0,14]
 Dist = [-7,7]
 
 # Define our space and time step sizes.
-dxs = [(0.3 + o/1000) for o in range(0,50)]
+dxs = [(0.2 + o/2500) for o in range(0,2000)]
 dts = [(o**2)/4 for o in dxs] # The limit for stability.
 err = []
 
 for i in range(0,len(dxs)):
     Lfull = run(dts[i],dxs[i],Time,Dist)
-    Lhalf = run(dts[i],dxs[i]/2,Time,Dist)
+    Lhalf = run(dts[i]/4,dxs[i]/2,Time,Dist)
     err.append(1 - (Lhalf/Lfull))
+    print("h = "+str(round(dxs[i],4))+", err = "+str(err[-1]))
 
 xlabel("h")
 ylabel("$\epsilon(h)$")
-semilogy(dxs,err,'o')
+#semilogy(dxs,err,'.')
+plot(dxs,err,'.')
+savefig("Error-linear.pdf",format='PDF')
 show()
