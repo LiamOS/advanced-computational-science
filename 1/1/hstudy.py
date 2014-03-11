@@ -54,8 +54,8 @@ Time = [0,14]
 Dist = [-7,7]
 
 # Define our space and time step sizes.
-dxs = [(0.2 + o/2500) for o in range(0,2000)]
-dts = [(o**2)/4 for o in dxs] # The limit for stability.
+dxs = [(0.02 + o/250) for o in range(0,200)]
+dts = [0.01 for o in dxs] #(o**2)/4 for o in dxs] # The limit for stability.
 err = []
 
 for i in range(0,len(dxs)):
@@ -66,7 +66,7 @@ for i in range(0,len(dxs)):
 
 xlabel("h")
 ylabel("$\epsilon(h)$")
-#semilogy(dxs,err,'.')
-plot(dxs,err,'.')
-savefig("Error-linear.pdf",format='PDF')
+semilogy(dxs,err,'.')
+#plot(dxs,err,'.')
+savefig("Error.pdf",format='PDF')
 show()

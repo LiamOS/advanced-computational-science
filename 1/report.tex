@@ -24,11 +24,12 @@ We are interested in solving the 1-d wave equation with $c=1$,
 \label{e:we}
 \end{equation}
 using central differences,
-$$
+\begin{equation}
 \frac{\partial^2 u}{\partial t^2} \approx \frac{\delta_t^2 \ujn}{\tau^2},
 \hspace{5mm}
 \frac{\partial^2 u}{\partial x^2} \approx \frac{\delta_x^2 \ujn}{h^2}
-$$
+\label{e:central}
+\end{equation}
 so our equation becomes
 \begin{equation}
 \frac{\delta_t^2 \ujn}{\tau^2} = \frac{\delta_x^2 \ujn}{h^2}
@@ -77,26 +78,70 @@ $$
 \xi^2 + \alpha \xi + 1 = 0
 $$
 with
-$$
-\alpha = -\nu^2 \left[ e^{-ikh} + e^{ikh} - 2\left(1 - \frac{1}{\nu^2}\right) \right]
-= -2 \nu^2 \left[ \cos(kh) - \left(1 - \frac{1}{\nu^2}\right) \right].
-$$
+$$\alpha = -\nu^2 \left[ e^{-ikh} + e^{ikh} - 2\left(1 - \frac{1}{\nu^2}\right) \right]
+= -2 \nu^2 \left[ \cos(kh) - \left(1 - \frac{1}{\nu^2}\right) \right] $$
+$$= -2 \nu^2 \left[ 1 - \sin^2\left(\frac{kh}{2}\right) - \left(1 - \frac{1}{\nu^2}\right) \right]
+=  2 \nu^2 \left[ \sin^2\left(\frac{kh}{2}\right) - \frac{1}{\nu^2} \right] $$
 This is a quadratic equation with roots
 $$
 \xi_\pm = \frac{1}{2} \left( -\alpha \pm \sqrt{\alpha^2 - 4} \right) =
-\frac{1}{2} \left( -\alpha \pm i\sqrt{(2 - \alpha)(2+\alpha)}\right)
+\frac{1}{2} \left( -\alpha \pm i\sqrt{(2 - \alpha)(2+\alpha)}\right).
 $$
-Our stability condition is $|\xi| \le 1$, with this implying
+Inserting $\alpha$ into the above gives
+$$ \xi_\pm = -\frac{1}{2}\left[2\nu^2 \sin^2\left(\frac{kh}{2}\right) -1 \right]
+\pm \frac{1}{2}\sqrt{\left(4\nu^2\sin^2\left(\frac{kh}{2}\right) -2\right)^2 - 4}
 $$
+$$ = -\left[2\nu^2 \sin^2\left(\frac{kh}{2}\right) -1 \right]
+\pm \nu\sin\left(\frac{kh}{2}\right)\sqrt{4\nu^2\sin^2\left(\frac{kh}{2}\right) -2}
 $$
+
+From here, it is immediately apparent that if $\nu >1$, both terms will be greater
+than $0$ for some values of $k$, making the method unstable.
 
 \subsection*{(3)}
 The program used is included in appendix \ref{a:1.3}.
 
 
-\section*{}
+\section*{Question 2}
+\subsection*{(1)}
+We are now asked to solve the wave equation with $c=1$ and external potential
+$V(x) = \frac{1}{\cosh^2(x)}$.
+I chose to use central differences -- equation \ref{e:central} -- once again as it
+is simple to program and showed no significant shortcomings in the previous
+section which cannot be fixed by computational power.
+By the same method as for question 1.1, we can use central differences for this
+equation. This gives
+\begin{equation}
+\ujnp = \nu^2 \left[\ujmn + \ujpn \right] - \ujnm + 2(1 - \nu^2)\ujn - \tau^2 V_j \ujn
+\label{e:cdp}
+\end{equation}
+where $V_j$ is the potential corresponding to the $x$-value $j$. The effect of
+$V$ can be seen to scale with the time step $\tau$, which is intuitive.
+
+The program was written in Python 3 again, and is in appendix \ref{a:2.1}.
+A plot of the waves behaviour is shown in figure \ref{f:cosh}.
+The wave interacts with the barier, and some is transmitted, while more
+is reflected.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{2/cosh.pdf}
+  \caption{The wave at various times, with the potential plotted in the dashed red line.}
+  \label{f:cosh}
+\end{figure}
 
 
+
+\subsection*{(2)}
+
+
+\subsection*{(3)}
+
+
+\subsection*{(4)}
+
+
+\newpage
 \begin{appendix}
 \section{Program for 1.1}
 \label{a:1.1}
@@ -105,6 +150,14 @@ The program used is included in appendix \ref{a:1.3}.
 \section{Program for 1.3}
 \label{a:1.3}
 \lstinputlisting[language=python]{1/hstudy.py}
+\newpage
+\section{Program for 2.1}
+\label{a:2.1}
+\lstinputlisting[language=python]{2/potential.py}
+\newpage
+\section{Program for 2.2}
+\label{a:2.2}
+\lstinputlisting[language=python]{2/hstudy.py}
 \end{appendix}
 
 
