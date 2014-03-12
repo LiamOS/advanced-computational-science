@@ -7,8 +7,8 @@ from matplotlib.pyplot import *
 from numpy import *
 
 # Define our space and time step sizes.
-dx = 0.01
-dt = dx
+dx = 0.02
+dt = 0.01
 
 # Define our Temporal and Spatial lengths.
 Time = [0,21]

@@ -62,6 +62,9 @@ The solutions at various times are shown in figure \ref{f:dirichlet}.
   \caption{Solution to the wave equation with Gaussian initial condition.}
   \label{f:dirichlet}
 \end{figure}
+The wave is observed to split in two, propagating half in either direction.
+At the boundaries, the wave is inverted, travelling back to superimpose into
+a mirror image of the initial condition at $t=14$.
 
 \subsection*{(2)}
 Our expression for $\ujn$ using Central Differences is given in equation \ref{e:cd}.
@@ -74,9 +77,10 @@ $$
 2(1 - \nu^2) \xi^n \eihjk.
 $$
 Dividing across by $\xi^{n-1} \eihjk$ and cleaning up gives
-$$
+\begin{equation}
 \xi^2 + \alpha \xi + 1 = 0
-$$
+\label{e:quad}
+\end{equation}
 with
 $$\alpha = -\nu^2 \left[ e^{-ikh} + e^{ikh} - 2\left(1 - \frac{1}{\nu^2}\right) \right]
 = -2 \nu^2 \left[ \cos(kh) - \left(1 - \frac{1}{\nu^2}\right) \right] $$
@@ -95,8 +99,36 @@ $$ = -\left[2\nu^2 \sin^2\left(\frac{kh}{2}\right) -1 \right]
 \pm \nu\sin\left(\frac{kh}{2}\right)\sqrt{4\nu^2\sin^2\left(\frac{kh}{2}\right) -2}
 $$
 
+We consider $\tau >0$ and $h>0$, and by extension $\nu>0$.
 From here, it is immediately apparent that if $\nu >1$, both terms will be greater
-than $0$ for some values of $k$, making the method unstable.
+than $1$ for some values of $k$, making the method unstable.
+For $\nu = 1$, $\xi_-$ can for some values of $k$, be greater than one.
+A good choice seems to be $\nu = \frac{1}{\sqrt{2}}$, as then the above reduces to
+$$\xi_\pm = -\left[\sin^2\left(\frac{kh}{2}\right) - 1 \right] \pm \sin\left(\frac{kh}{2}\right)
+\sqrt{\sin^2\left(\frac{kh}{2}\right) -1}$$
+$$= -\left[\sin^2\left(\frac{kh}{2}\right) - 1 \right] \pm \sin\left(\frac{kh}{2}\right)
+\sqrt{-\cos^2\left(\frac{kh}{2}\right)}$$
+$$= -\left[\sin^2\left(\frac{kh}{2}\right) - 1 \right] \pm i\sin\left(\frac{kh}{2}\right)
+\cos\left(\frac{kh}{2}\right)$$
+In the limits of $h \to 0$ or $k \to 0$, the sin terms go to 0, and we are left with
+$\xi_\pm = 1$. Elsewhere, the function moves between 0 and 1 as a function of $k$.
+Otherwise, when considering $|\xi_\pm|$, it is calculated by
+$$ \xi_\pm = \sqrt{\text{Re}\left(\xi_\pm\right)^2 + \text{Im}\left(\xi_\pm\right)^2}.$$
+This demonstrates that $\xi_+$ and $\xi_-$ are equivalent for $\nu=\frac{1}{\sqrt{2}}$.
+It is worth noting that in
+the above workings on the expression for $\xi_\pm$, many $\pm$s were absorbed by the
+initial $\pm$ due to working with the square root. This leads me to believe that both
+$\xi_\pm$ are not physically significant.
+In the quadratic form, we consider what happens when we require $\xi \in [-1,1]$.
+It is clear that $\alpha$ as defined earlier must be bound to the region $[-2,2]$,
+which sets a clear requirement that $\nu \in (0,1]$\footnote{$\nu$ could be negative, but
+we have previously constrained it to be positive.}
+is a limit beyond which stability will not be achieved. This constrains
+$\tau \le h$ for stability.
+However, I have chosen to take $\nu = \frac{1}{\sqrt{2}}$
+for the computations in this report, a situation where $\xi \in [0,1]$ is guaranteed
+, as this avoids the possibility of one of $\xi_\pm$ blowing the solution up, should I be wrong.
+
 
 \subsection*{(3)}
 The program used is included in appendix \ref{a:1.3}.
@@ -120,7 +152,7 @@ $V$ can be seen to scale with the time step $\tau$, which is intuitive.
 
 The program was written in Python 3 again, and is in appendix \ref{a:2.1}.
 A plot of the waves behaviour is shown in figure \ref{f:cosh}.
-The wave interacts with the barier, and some is transmitted, while more
+The wave interacts with the barrier, and some is transmitted, while more
 is reflected.
 
 \begin{figure}

@@ -8,8 +8,8 @@ from matplotlib.pyplot import *
 from numpy import *
 
 # Define our space and time step sizes.
-dx = 0.004
-dt = dx
+dx = 0.02
+dt = dx/sqrt(2)
 
 # Define our Temporal and Spatial lengths.
 Time = [0,14]
@@ -46,7 +46,7 @@ for j in range(1,nx-1):
 for n in range(2,nt):
     for j in range(1,nx-1):
         U[n][j] = c*(U[n-1][j-1] - 2*U[n-1][j] + U[n-1][j+1]) - U[n-2][j] + 2*U[n-1][j]
-    if ((n-2)%600) is 0:
+    if ((n-2)%160) is 0:
         plot(x,U[n],label="t = "+str(round(14*(n/nt),1)))
 xlabel("$x$")
 ylabel("$u(x,t)$")

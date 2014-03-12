@@ -8,10 +8,11 @@
 from matplotlib.pyplot import *
 from numpy import *
 
-def run(dt,dx,T,D):
+def run(dx,T,D):
     # Define variables with the number of space/time steps for ease later.
     # They must be cast as ints for use with range(), but should be integers
     # anyway, since I'll only be setting dx as a nice value, I swear...
+    dt = dx/sqrt(2)
     nt = int((T[1] - T[0])/dt)
     nx = int((D[1] - D[0])/dx)
 
@@ -55,12 +56,11 @@ Dist = [-7,7]
 
 # Define our space and time step sizes.
 dxs = [(0.02 + o/250) for o in range(0,200)]
-dts = [0.01 for o in dxs] #(o**2)/4 for o in dxs] # The limit for stability.
 err = []
 
 for i in range(0,len(dxs)):
-    Lfull = run(dts[i],dxs[i],Time,Dist)
-    Lhalf = run(dts[i]/4,dxs[i]/2,Time,Dist)
+    Lfull = run(dxs[i],Time,Dist)
+    Lhalf = run(dxs[i]/2,Time,Dist)
     err.append(1 - (Lhalf/Lfull))
     print("h = "+str(round(dxs[i],4))+", err = "+str(err[-1]))
 
