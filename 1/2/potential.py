@@ -50,7 +50,7 @@ for n in range(2,nt):
         # Impose the Neumann condition here:
     U[n][0] = U[n][1]
     U[n][nx-1] = U[n][nx-2]
-    if ((n-2)%80) is 0:
+    if ((n-2)%90) is 0:
         plot(x,U[n],label="t = "+str(round(Time[1]*(n/nt),1)))
 xlabel("$x$")
 ylabel("$u(x,t)$")

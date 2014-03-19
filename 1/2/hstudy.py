@@ -50,7 +50,7 @@ def run(dx,Time,Dist):
     return norm
 
 # Define our space and time step sizes.
-dxs = linspace(0.001,0.751,700)
+dxs = linspace(0.750,0.002,699)
 # Define our Temporal and Spatial lengths.
 aTime = [0,19]
 aDist = [-20,20]

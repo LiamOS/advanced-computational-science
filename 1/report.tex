@@ -3,7 +3,7 @@
 
 
 \title{Assignment 1 - Advanced Computational Science}
-
+ 
 \newcommand{\ujn}{u_{j}^{n}}
 \newcommand{\ujpn}{u_{j+1}^{n}}
 \newcommand{\ujmn}{u_{j-1}^{n}}
@@ -123,7 +123,8 @@ This demonstrates that $\xi_+$ and $\xi_-$ are equivalent for $\nu=\frac{1}{\sqr
 It is worth noting that in
 the above workings on the expression for $\xi_\pm$, many $\pm$s were absorbed by the
 initial $\pm$ due to working with the square root. This leads me to believe that both
-$\xi_\pm$ are not physically significant.
+$\xi_\pm$ are not physically significant, or correspond to the amplifications forward
+and backward in time.
 In the quadratic form, we consider what happens when we require $\xi \in [-1,1]$.
 It is clear that $\alpha$ as defined earlier must be bound to the region $[-2,2]$,
 which sets a clear requirement that $\nu \in (0,1]$\footnote{$\nu$ could be negative, but
@@ -235,7 +236,9 @@ are peaks in the relative error for both cases when the wave is interacting with
 points, and the amplitude of these peaks is slightly over double when Neumann boundary conditions
 are used.
 The peaks are bounded by a number that appears to scale linearly with $h$, in the sense that halving
-$h$ halves the amplitude of these peaks, and so on.
+$h$ halves the amplitude of these peaks, and so on. The lower continuum of the relative error appears
+to scale with $h^{-2}$, showing a different behaviour in the relative energy when the wave is
+interacting with a boundary.
 
 For the majority of the interval $t\in [0,14]$, we see that $f_r(t)$ is bounded below by a
 small number, which is $h^{-2}$. Given the $h^{-2}$, $\tau^{-2}$ dependence of
@@ -268,10 +271,9 @@ and some is transmitted, while more is reflected.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{2/cosh.pdf}
-  \caption{The wave at various times, with the potential plotted in the dashed grey line.}
+  \caption{The wave at various times, with the potential plotted in the dashed grey line, $h=0.05$.}
   \label{f:cosh}
 \end{figure}
-
 
 
 \clearpage
@@ -280,11 +282,29 @@ To validate our choice of $h$ in the previous section, we perform another study 
 the relative error defined in equation \ref{e:err}.
 The program which does this operates in the same manner as the previous resolution study,
 and is presented in appendix \ref{a:2.2}.
+Figure \ref{f:hstudy2} shows the relative error as a function of $h$, showing an optimal
+value for $h \sim 0.075$. This value is however lowered in the next section.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{2/epsilon.pdf}
+  \caption{Relative error in $L^2$-norms for varios values of $h$.}
+  \label{f:hstudy2}
+\end{figure}
+
+
 
 \clearpage
 \subsection*{(3)}
-We now compute the total energy of the wave as a function of time. As in section
-1.5.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{2/En.pdf}
+  \caption{Relative error in energy as a function of time.}
+  \label{f:eerr}
+\end{figure}
+
+\subsubsection*{Analytical Energy Conservation}
 We define our Hamiltonian density as in section 1.5, but with
 a term for the external potential, giving
 \begin{equation}
@@ -292,20 +312,39 @@ a term for the external potential, giving
 +\frac{1}{2}\left(\frac{\partial u}{\partial x}\right)^2 +\frac{1}{2}V(x)u(x,t)^2,
 \label{e:ham}
 \end{equation}
-making our expression for the numerical $\mathcal{H}$
+To show that energy is conserved, we consider the time derivative of the energy and show it
+will be zero.
+$$ \frac{d}{dt} \int_{x_\text{min}}^{x_\text{max}} \mathcal{H}(x,t)dx =
+\int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial t}\mathcal{H}(x,t)dx = $$
+\begin{equation}
+\int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial t} \left[
+\frac{1}{2}\left(\frac{\partial u}{\partial t}\right)^2
++\frac{1}{2}\left(\frac{\partial u}{\partial x}\right)^2 +\frac{1}{2}V(x)u(x,t)^2\right] dx
+\label{e:int1}
+\end{equation}
+The wave eqution can be rearranged to give an expression for the time derivatives, remembering $c=1$,
+$$ \frac{\partial^2 u}{\partial t^2} = \frac{\partial^2 u}{\partial x^2} - V(x)u(x,t)$$
+and substituting this into equation \ref{e:int2} gives
+\begin{equation}
+\label{e:int2}
+\end{equation}
+
+\subsubsection*{Numerical Results}
+We now compute the total energy of the wave as a function of time. As in section
+1.5.
+Taking our expression for $\mathcal{H}$ from equation \ref{e:ham}, we obtain
+an expression for the numerical $\mathcal{H}_j^n$
 $$ \mathcal{H}_j^n = \frac{1}{2}\left[\frac{1}{2\tau}\left(\ujnp - \ujnm\right)\right]^2
 + \frac{1}{2}\left[ \frac{1}{2h} \left(\ujpn - \ujmn\right)\right]^2 +
 \frac{1}{2}V_j\left(\ujn\right)^2.$$
 This is integrated as before, and the results for various values of $h$ are shown in
-figure \ref{f:hstudy2}.
+figure \ref{f:eerr}.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{2/En.pdf}
-  \caption{Relative error in energy as a function of time.}
-  \label{f:hstudy2}
-\end{figure}
-
+We see large peaks in the error during the interaction of the wave with the potential, after which it smooths
+out. Again, the baseline relative error, and peak height, seem to scale as $h^{-2}$.
+In the previous section, 2.2, our optimal value for $h$ is $\sim 0.075$. This value however gives peaks in the
+relative energy here greater than $10^{-3}$, so our optimal value for $h$ is now taken to be $0.05$, as this
+divides our range evenly and provides relative errors for the $L^2$-norm and energy better than $10^{-3}$.
 
 \clearpage
 \subsection*{(4)}
@@ -324,12 +363,13 @@ barrier and the boundaries to be interacting with neither, and in this case is t
 $t_\text{max} = 18$.
 
 Figure \ref{f:sigma} shows the dependence of $T$ on $\sigma$. There is a clear
-increase in $T$ as $\sigma$ decreases, below $\sigma \sim 2.5$. Above $\sim 2.5$,
+increase in $T$ as $\sigma$ decreases, below $\sigma \sim 3$. Above $\sim 3$,
 the evaluation of $T$ becomes unrepresentative of what is happening, as
 the initial Gaussian is spread very wide, with a significant portion already beyond
 the barrier, as is seen in figure \ref{f:bigsig}, with $\sigma = 4$.
 This can be rectified by changing the value of $\mu$ in the Gaussian to start the
-wave further away, but the range of $\sigma$ values presented here is sufficient.
+wave further away, but the range of $\sigma$ values presented here is sufficient
+to quantify the behaviour of the system.
 
 Our initial condition, $\frac{\partial u}{\partial t}(x,0) = \frac{\partial u}{\partial x} (x,0)$,
 is largely responsible for the effect of $\sigma$ on $T$. Since we know
@@ -342,7 +382,7 @@ a more energetic wave better able to overcome the barrier.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{2/sigma.pdf}
+  \includegraphics[width=0.8\textwidth]{2/sigma.pdf}
   \caption{Dependence of $T$ on $\sigma$.}
   \label{f:sigma}
 \end{figure}
@@ -361,34 +401,27 @@ a more energetic wave better able to overcome the barrier.
 \section{Program for 1.1}
 \label{a:1.1}
 \lstinputlisting[language=python]{1/dirichlet.py}
-\newpage
 \section{Program for 1.3}
 \label{a:1.3}
 \lstinputlisting[language=python]{1/hstudy.py}
-\newpage
 \section{Program for 1.4}
 \label{a:1.4}
 \lstinputlisting[language=python]{1/neumann.py}
-\newpage
 \section{Programs for 1.5}
 \label{a:1.5}
 {\bf Dirichlet Boundaries}:
 \lstinputlisting[language=python]{1/Hd.py}
 {\bf Neumann Boundaries}:
 \lstinputlisting[language=python]{1/Hn.py}
-\newpage
 \section{Program for 2.1}
 \label{a:2.1}
 \lstinputlisting[language=python]{2/potential.py}
-\newpage
 \section{Program for 2.2}
 \label{a:2.2}
 \lstinputlisting[language=python]{2/hstudy.py}
-\newpage
 \section{Program for 2.3}
 \label{a:2.3}
 \lstinputlisting[language=python]{2/potential.py}
-\newpage
 \section{Program for 2.4}
 \label{a:2.4}
 \lstinputlisting[language=python]{2/trans.py}

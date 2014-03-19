@@ -61,12 +61,12 @@ aTime = [0,19]
 aDist = [-20,20]
 sigmas = []
 Ts = []
-for s in linspace(4,0.05,200):
+for s in linspace(4,0.4,200):
      sigmas.append(s)
      Ts.append(run(s,0.05,aTime,aDist))
      print("Sigma = "+str(round(s,5))+", T = "+str(round(Ts[-1],5)))
 
-plot(sigmas,ratios,'o')
+plot(sigmas,Ts,'-')
 ylabel("$T(\sigma)$")
 xlabel("$\sigma$")
 savefig("sigma.pdf",format="pdf")

@@ -48,6 +48,8 @@ def run(dx,Time,Dist):
         U[n][0] = U[n][1]
         U[n][nx-1] = U[n][nx-2]
 
+    # From here we compute H(x,t). The boundary terms are messy, but most
+    # of this corresponds exactly to the analytical form.
     # Sort out the t = 0 boundary.
     H[0][0] = 0.5*(((1/dt)*(U[1][0] - U[0][0]))**2) + 0.5*(((1/dx)*(U[0][1] - U[0][0]))**2)
     H[0][nx-1] = 0.5*(((1/dt)*(U[1][nx-1] - U[0][nx-1]))**2) + 0.5*(((1/dx)*(U[0][nx-1] - U[0][nx-2]))**2)
@@ -69,14 +71,22 @@ def run(dx,Time,Dist):
         H[nt-1][j]=0.5*(((1/(dt))*(U[nt-1][j]-U[nt-1][j]))**2)+0.5*(((1/(2*dx))*(U[nt-1][j+1]-U[nt-1][j-1]))**2)
     E[nt-1] += dx*sum(H[nt-1])
 
+    # F is the relative error of energy, as defined in the report.
     F = array([(e/E[0] - 1) for e in E])
+    F[-1] = F[-2] # Due to the boundaries the final term is not well constrained.
     return array([t,F])
 
+# Perform four runs of the above function, to display for various h.
 a1 = run(0.1,[0,14],[-7,7])
 a2 = run(0.05,[0,14],[-7,7])
+a3 = run(0.025,[0,14],[-7,7])
+a4 = run(0.0125,[0,14],[-7,7])
 
+# Now plot everything.
 plot(a1[0],a1[1],'-',label="$h$ = 0.1")
 plot(a2[0],a2[1],'-',label="$h$ = 0.05")
+plot(a3[0],a3[1],'-',label="$h$ = 0.025")
+plot(a4[0],a4[1],'-',label="$h$ = 0.0125")
 xlabel("$t$")
 ylabel("$E(t)$")
 legend()
