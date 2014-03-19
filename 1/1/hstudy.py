@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # Program to solve the wave equation with c=1 using central differences.
 # Dirichlet boundaries are used, and imposed implicitly, by allocating an array
-# of zeros and not writing to the edge points.
-# A variety of h values are used.
+# of zeros and not writing to the edge points. A variety of h values are used.
 # Liam O'Sullivan
-
 from matplotlib.pyplot import *
 from numpy import *
 
@@ -15,7 +13,6 @@ def run(dx,T,D):
     dt = dx/sqrt(2)
     nt = int((T[1] - T[0])/dt)
     nx = int((D[1] - D[0])/dx)
-
     # Define our initial arrays.
     U = zeros((nt, nx), dtype=float64)
     t = zeros(nt, dtype=float64)
@@ -55,7 +52,7 @@ Time = [0,14]
 Dist = [-7,7]
 
 # Define our space and time step sizes.
-dxs = [(0.02 + o/250) for o in range(0,200)]
+dxs = [(0.001 + o/2500) for o in range(0,2000)]
 err = []
 
 for i in range(0,len(dxs)):
@@ -64,9 +61,8 @@ for i in range(0,len(dxs)):
     err.append(1 - (Lhalf/Lfull))
     print("h = "+str(round(dxs[i],4))+", err = "+str(err[-1]))
 
-xlabel("h")
+xlabel("$h$")
 ylabel("$\epsilon(h)$")
 semilogy(dxs,err,'.')
-#plot(dxs,err,'.')
 savefig("Error.pdf",format='PDF')
 show()

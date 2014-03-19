@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Program to solve the wave equation with c=1 using central differences.
-# Dirichlet boundaries are used, and imposed implicitly, by allocating an array
+# Neumann boundaries are used, and imposed by eqating the endpoints to one in.
 # of zeros and not writing to the edge points.
 # Liam O'Sullivan
 
@@ -16,7 +16,8 @@ Time = [0,14]
 Dist = [-7,7]
 
 # Define variables with the number of space/time steps for ease later.
-# They must be cast as ints for use with range().
+# They must be cast as ints for use with range(), but should be integers
+# anyway, since I'll only be setting dx as a nice value, I swear...
 nt = int((Time[1] - Time[0])/dt) + 1
 nx = int((Dist[1] - Dist[0])/dx) + 1
 
@@ -33,7 +34,6 @@ for j in range(0,nx):
 # Initialise the t_0 part of the array.
 for j in range(1,nx-1):
     U[0][j] = e**(-x[j]*x[j])
-plot(x,U[0],label="t = 0")
 
 # c is not c from the wave equation:
 c = (dt/dx)**2
@@ -41,17 +41,20 @@ c = (dt/dx)**2
 # Since U_j^n-1 is unknown, I take is equivalent to U_j^n for the first run.
 for j in range(1,nx-1):
     U[1][j] = c*(U[0][j-1] - 2*U[0][j] + U[0][j+1]) + U[0][j]
+U[1][0] = U[1][1]
+U[1][nx-1] = U[1][nx-2]
 
 # Now perform our integration.
 for n in range(2,nt):
     for j in range(1,nx-1):
         U[n][j] = c*(U[n-1][j-1] - 2*U[n-1][j] + U[n-1][j+1]) - U[n-2][j] + 2*U[n-1][j]
-    if ((n+1)%33) is 0:
+    U[n][0] = U[n][1]
+    U[n][nx-1] = U[n][nx-2]
+    if ((n-2)%42) is 0:
         plot(x,U[n],label="t = "+str(round(14*(n/nt),1)))
 xlabel("$x$")
 ylabel("$u(x,t)$")
 xlim([-7,7])
-ylim([-1,1])
 legend()
-savefig("dirichlet.pdf",format="pdf")
+savefig("neumann.pdf",format="pdf")
 show()

@@ -9,16 +9,17 @@ from numpy import *
 
 # Define our space and time step sizes.
 dx = 0.1
-dt = dx/sqrt(2)
+dt = 0.1 #dx/sqrt(2)
 
 # Define our Temporal and Spatial lengths.
 Time = [0,14]
 Dist = [-7,7]
 
 # Define variables with the number of space/time steps for ease later.
-# They must be cast as ints for use with range().
-nt = int((Time[1] - Time[0])/dt) + 1
-nx = int((Dist[1] - Dist[0])/dx) + 1
+# They must be cast as ints for use with range(), but should be integers
+# anyway, since I'll only be setting dx as a nice value, I swear...
+nt = int((Time[1] - Time[0])/dt)
+nx = int((Dist[1] - Dist[0])/dx)
 
 # Define our initial arrays.
 U = zeros((nt, nx), dtype=float64)
@@ -33,7 +34,6 @@ for j in range(0,nx):
 # Initialise the t_0 part of the array.
 for j in range(1,nx-1):
     U[0][j] = e**(-x[j]*x[j])
-plot(x,U[0],label="t = 0")
 
 # c is not c from the wave equation:
 c = (dt/dx)**2
@@ -46,12 +46,11 @@ for j in range(1,nx-1):
 for n in range(2,nt):
     for j in range(1,nx-1):
         U[n][j] = c*(U[n-1][j-1] - 2*U[n-1][j] + U[n-1][j+1]) - U[n-2][j] + 2*U[n-1][j]
-    if ((n+1)%33) is 0:
+    if ((n-2)%32) is 0:
         plot(x,U[n],label="t = "+str(round(14*(n/nt),1)))
 xlabel("$x$")
 ylabel("$u(x,t)$")
 xlim([-7,7])
-ylim([-1,1])
 legend()
 savefig("dirichlet.pdf",format="pdf")
 show()
