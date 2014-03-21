@@ -194,16 +194,61 @@ from the walls without inverting as before.
 \clearpage
 \subsection*{(5)}
 \subsubsection*{Analytical Energy Conservation}
+We are given the followng {\it Hamiltonian density},
 \begin{equation}
 \mathcal{H}(x,t) = \frac{1}{2}\left( \frac{\partial u}{\partial t}\right)^2
 + \frac{1}{2}\left( \frac{\partial u}{\partial x}\right)^2
 \label{e:hd}
 \end{equation}
-
+and its relation to the energy of the wave,
 \begin{equation}
-E(t) = \int_{x_\text{min}}^{x_\text{max}} \mathcal{H}(x,t) dx
+E(t) = \int_{x_\text{min}}^{x_\text{max}} \mathcal{H}(x,t) dx.
 \label{e:energy}
 \end{equation}
+To show that energy is conserved, we consider the time derivative of the energy and show it
+will be zero.
+$$ \frac{d}{dt} \int_{x_\text{min}}^{x_\text{max}} \mathcal{H}(x,t)dx =
+\int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial t}\mathcal{H}(x,t)dx = $$
+\begin{equation}
+\int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial t} \left[
+\frac{1}{2}\left(\frac{\partial u}{\partial t}\right)^2
++\frac{1}{2}\left(\frac{\partial u}{\partial x}\right)^2\right] dx
+\label{e:int7}
+\end{equation}
+Bringing in the time derivative and using the product rule allows us to rewrite this as
+$$
+  \frac{1}{2}\int_{x_\text{min}}^{x_\text{max}} \left[
+  2\frac{\partial u}{\partial t}\frac{\partial^2 u}{\partial t^2}+
+  2\frac{\partial u}{\partial x}\frac{\partial^2 u}{\partial t \partial x}
+  \right] dx
+$$
+The wave eqution can be rearranged to give an expression for the time derivatives, remembering $c=1$,
+$$ \frac{\partial^2 u}{\partial t^2} = \frac{\partial^2 u}{\partial x^2}$$
+and substituting this into equation \ref{e:int2} gives
+$$
+  =\int_{x_\text{min}}^{x_\text{max}} \left[
+  \frac{\partial u}{\partial t}\frac{\partial^2 u}{\partial x^2}
+  +\frac{\partial u}{\partial x}\frac{\partial^2 u}{\partial t \partial x}\right] dx
+$$
+which can be seen to be equal to
+\begin{equation}
+  \frac{dE}{dt} =
+  \int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial x}\left(\frac{\partial u}{\partial t}
+  \frac{\partial u}{\partial x}\right) dx
+\label{e:int8}
+\end{equation}
+which can be evaluated by computing
+\begin{equation}
+  \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \Big| ^{x_\text{min}}_{x_\text{max}}.
+\label{e:int9}
+\end{equation}
+
+For Neumann boundary conditions, we know $\frac{\partial u}{\partial x} =0 $ when $x=x_\text{min/max}$,
+so $\frac{dE}{dt}$ is obviously $0$ in this case. 
+For Dirichlet boundaries, we consider first that $u(x_\text{min/max},t) = 0$. We then consider
+$\frac{\partial}{\partial t}u(x_\text{min/max},t)$, which must be $0$ as the boundaries do not change
+in time. Thus, the time derivatives in the boundary evaluation go to zero and we again obtain
+$\frac{dE}{dt} = 0$. As such, energy is conserved in both cases.
 \subsubsection*{Numerical Results}
 The Hamiltonian density is defined in equation \ref{e:hd}. As such, we compute an
 array of values, $\mathcal{H}_j^n$. At the boundaries of space or time,
@@ -322,12 +367,47 @@ $$ \frac{d}{dt} \int_{x_\text{min}}^{x_\text{max}} \mathcal{H}(x,t)dx =
 +\frac{1}{2}\left(\frac{\partial u}{\partial x}\right)^2 +\frac{1}{2}V(x)u(x,t)^2\right] dx
 \label{e:int1}
 \end{equation}
+Bringing in the time derivative and using the product rule allows us to rewrite this as
+$$
+  \frac{1}{2}\int_{x_\text{min}}^{x_\text{max}} \left[
+  2\frac{\partial u}{\partial t}\frac{\partial^2 u}{\partial t^2}+
+  2\frac{\partial u}{\partial x}\frac{\partial^2 u}{\partial t \partial x}
+  +2V(x)\frac{\partial u}{\partial t}u(x,t)\right] dx
+$$
 The wave eqution can be rearranged to give an expression for the time derivatives, remembering $c=1$,
 $$ \frac{\partial^2 u}{\partial t^2} = \frac{\partial^2 u}{\partial x^2} - V(x)u(x,t)$$
 and substituting this into equation \ref{e:int2} gives
+$$
+  \int_{x_\text{min}}^{x_\text{max}} \left[
+  \frac{\partial u}{\partial t}\left(\frac{\partial^2 u}{\partial x^2}- V(x)u(x,t)\right)+
+  \frac{\partial u}{\partial x}\frac{\partial^2 u}{\partial t \partial x}
+  +V(x)\frac{\partial u}{\partial t}u(x,t)\right] dx
+$$
+where the potential terms cancel, leaving us with
+$$
+  =\int_{x_\text{min}}^{x_\text{max}} \left[
+  \frac{\partial u}{\partial t}\frac{\partial^2 u}{\partial x^2}
+  +\frac{\partial u}{\partial x}\frac{\partial^2 u}{\partial t \partial x}\right] dx
+$$
+which can be seen to be equal to
 \begin{equation}
+  \frac{dE}{dt} =
+  \int_{x_\text{min}}^{x_\text{max}} \frac{\partial}{\partial x}\left(\frac{\partial u}{\partial t}
+  \frac{\partial u}{\partial x}\right) dx
 \label{e:int2}
 \end{equation}
+which can be evaluated by computing
+\begin{equation}
+  \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \Big| ^{x_\text{min}}_{x_\text{max}}.
+\label{e:int3}
+\end{equation}
+
+For Neumann boundary conditions, we know $\frac{\partial u}{\partial x} =0 $ when $x=x_\text{min/max}$,
+so $\frac{dE}{dt}$ is obviously $0$ in this case. 
+For Dirichlet boundaries, we consider first that $u(x_\text{min/max},t) = 0$. We then consider
+$\frac{\partial}{\partial t}u(x_\text{min/max},t)$, which must be $0$ as the boundaries do not change
+in time. Thus, the time derivatives in the boundary evaluation go to zero and we again obtain
+$\frac{dE}{dt} = 0$. As such, energy is conserved in both cases.
 
 \subsubsection*{Numerical Results}
 We now compute the total energy of the wave as a function of time. As in section
