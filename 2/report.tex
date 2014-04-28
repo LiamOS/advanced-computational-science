@@ -208,7 +208,9 @@ making timing and comparing a variety of resolutions arduous. Due to time constr
 for this section.
 
 Figure \ref{f:41} shows the relatively small difference in $\epsilon(t)$ for $h < 1/200$ compared to the previous
-cases. It can be seen that higher resolutions converge better.
+cases. It can be seen that higher resolutions converge better. It might make sense to redefine $\epsilon_0(t)$ to be
+the highest resolution, but the function is simple, so the lack of such a redefinition is unnecessary to see
+the convergence.
 
 Figure \ref{f:42} shows the runtime dependence of the algorithm on resolution. When the \verb+run()+ function is
 called, it noted the process' CPU time on entry, and subtracts the CPU time on exit, returning the difference as
