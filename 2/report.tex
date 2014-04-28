@@ -183,11 +183,18 @@ $h_0 = 1/200$, $h_1 = 1/100$, $h_2 = 1/50$, with $h_x = h_y = h$.
 
 
 \subsection*{iii}
+We are told that comparing the quantity
+$$
+  \epsilon_k(t) = 1 - \frac{ | | u_k (\cdot,t) | |_2  }{| | u_0 (\cdot,t) | |_2 }
+$$
+where $| | u_k (\cdot,t) | |_2$ is the $L^2$-norm of the solution corresponding to $h_k$.
+We are told to take $h_0 = 1/200$ and $h_1 = 1/100$, $h_2 = 1/50$.
+The results are shown in figure \ref{f:3}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{2/3/plot.pdf}
-  \caption{}
+  \caption{$\epsilon_{1,2}(t)$}
   \label{f:3}
 \end{figure}
 
@@ -197,23 +204,47 @@ that we do not store the entire array for $u$, but only the amount necessary for
 I found that only one array for $u$ and one for $u^{n+1/2}$ are necessary, and the computation
 can effectively be done in place. After each run, the $L^2$-norm is computed and assigned into an array
 as before. Unfortunately, the runtime for 10 time steps is 300 seconds at the resolution of $h = 1/800$,
-making timing and comparing a variety of resolutions arduous. Due to time constraints, $nt=1000$ was used
+making timing and comparing a variety of resolutions arduous. Due to time constraints, $nt=100$ was used
 for this section.
+
+Figure \ref{f:41} shows the relatively small difference in $\epsilon(t)$ for $h < 1/200$ compared to the previous
+cases. It can be seen that higher resolutions converge better.
+
+Figure \ref{f:42} shows the runtime dependence of the algorithm on resolution. When the \verb+run()+ function is
+called, it noted the process' CPU time on entry, and subtracts the CPU time on exit, returning the difference as
+the runtime.
+It can be seen to scale somewhat inversely with resolution.
 
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{2/4/plot.pdf}
-  \caption{}
+  \caption{$\epsilon(t)$ for various resolutions.}
   \label{f:41}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{2/4/resolution.pdf}
-  \caption{}
+  \caption{Runtime dependence on resolution.}
   \label{f:42}
 \end{figure}
+
+\section*{Discussion}
+Generally, Python seemed significantly slower than the Matlab programs of my classmates, up to an order
+of magnitude in some cases. This was a severe constraint in the final section, limiting the number of time
+steps.
+Various efforts were made to improve the performance, but most failed. Vectorising expressions instead of \verb+for+
+loops was tested
+\begin{verbatim}
+          for i in ...: # Normal.                          for i in ...: # Vectorised.
+              for j in ...:                                    U[i][:] = TMP[:]
+                  U[i][j] = TMP[j]
+\end{verbatim}
+but actually worsened performance by an order of magnitude in the section of interest.
+
+Obvious bottlenecks include repeatedly calling the function to solve the Thomas algorithm, which
+is not particularly efficient, and the use of many \verb+for+ loops.
 
 \end{document}
 % vim: spell

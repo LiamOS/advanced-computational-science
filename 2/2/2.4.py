@@ -145,13 +145,13 @@ for i in hs:
 xlabel("Time")
 ylabel(r"$e(t)$")
 legend(loc='best')
-#savefig("4/plot.pdf",format='PDF')
+savefig("4/plot.pdf",format='PDF')
 show()
 clf()
 plot(hs,Ts,'o')
 ylabel("Runtime [s]")
 xlabel("Resolution")
-#savefig("4/resolution.pdf",format='PDF')
+savefig("4/resolution.pdf",format='PDF')
 show()
 
 # vim: ts=4
